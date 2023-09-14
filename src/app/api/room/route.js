@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 
 export const GET = async () => {
   readDB();
+
   return NextResponse.json({
     ok: true,
     //rooms:
@@ -13,15 +14,25 @@ export const GET = async () => {
 };
 
 export const POST = async (request) => {
+  const body = await request.json();
   const payload = checkToken();
-
-  // return NextResponse.json(
-  //   {
-  //     ok: false,
-  //     message: "Invalid token",
-  //   },
-  //   { status: 401 }
-  // );
+  const findroom = DB.rooms.find((x) => x.roomName === roomName);
+  if (findroom) {
+    return NextResponse.json(
+      {
+        ok: false,
+        message: `Room ${body.roomName} already exists`,
+      },
+      { status: 400 }
+    );
+    // return NextResponse.json(
+    //   {
+    //     ok: false,
+    //     message: "Invalid token",
+    //   },
+    //   { status: 401 }
+    // );
+  }
 
   readDB();
 

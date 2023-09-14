@@ -5,6 +5,13 @@ import { NextResponse } from "next/server";
 
 export const GET = async (request) => {
   readDB();
+  const messageId = request.nextUrl.searchParams.get("messageId");
+  const messages = [];
+  for (const enroll of DB.messages) {
+    if (enroll.messageId === messageId) {
+      messages.push(enroll.messageText);
+    }
+  }
 
   // return NextResponse.json(
   //   {
@@ -13,6 +20,10 @@ export const GET = async (request) => {
   //   },
   //   { status: 404 }
   // );
+  return NextResponse.json({
+    ok: true,
+    messages,
+  });
 };
 
 export const POST = async (request) => {
